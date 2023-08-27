@@ -22,7 +22,7 @@ const getTodayClasses = async (req, res) => {
     throw new Error("You do not have a timetable, contact admin for creating one");
 
   const days = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
-  const today = new Date('August 15, 2023 03:24:00').getDay();
+  const today = new Date('August 23 2023, 00:00:00').getDay("August 21 2023") - 1;
   console.log(days[today]);
   await Timetable.populate(facultyTimetable, { path: 'data', select: days[today] });
   console.log(facultyTimetable.data[days[today]]);
@@ -38,16 +38,22 @@ const getTodayClasses = async (req, res) => {
 
   // here create the required object of classes and period
   // no need of entire timetable
-  const response = {};
+  const response = [];
   for (let period = 1; period <= 9; period++) {
     if (facultyTimetable.data[days[today]]['_' + period]) {
       const allotment = facultyTimetable.data[days[today]]['_' + period];
-      if (response[allotment._id])
-        response[allotment._id].push({ period: period, class: allotment.class, course: allotment.course })
-      else
-        response[allotment._id] = [{ period: period, class: allotment.class, course: allotment.course }]
+      response.push({
+        allotment: allotment._id,
+        period: period,
+        class: allotment.class,
+        course: allotment.course
+      })
+      // if (response[allotment._id])
+      //   response[allotment._id].push({ period: period, class: allotment.class, course: allotment.course })
+      // else
+      //   response[allotment._id] = [{ period: period, class: allotment.class, course: allotment.course }]
     }
-  }  
+  }
 
   console.log(response);
   res.status(200).send(response);
@@ -55,8 +61,7 @@ const getTodayClasses = async (req, res) => {
 
 const getStudentsFromClass = async (req, res) => {
   console.log(req.params);
-  const students = await Student.find({ class: req.params.class });
-
+  const students = await Student.find({ class: req.params.class }).select("-password");
   res.status(200).send(students);
 }
 

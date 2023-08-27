@@ -13,6 +13,7 @@ const errorHandlerMiddleware = require('./middlewares/errorHandler');
 // routes
 const adminRouter = require('./routes/adminRoutes');
 const facultyRouter = require('./routes/facultyRoutes');
+const studentRouter = require('./routes/studentRoutes');
 
 // head middlewares
 app.use(cors());
@@ -21,6 +22,7 @@ app.use(express.json());
 // routes config
 app.use('/api/v1/admin/', adminRouter);
 app.use('/api/v1/faculty/',facultyRouter);
+app.use('/api/v1/student/',studentRouter);
 
 // test route
 app.get("/test", (req, res) =>  {
