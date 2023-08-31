@@ -23,8 +23,8 @@ const submitAttendance = async (req, res) => {
     period: req.body.period,
     allotment: req.body.allotment
   });
-  if (existingAttendance)
-    throw new Error("Attendance already exists for the day");
+  // if (existingAttendance)
+  //   throw new Error("Attendance already exists for the day");
   
   // store it in attendance records collection
   const attendanceRecord = await AttendanceRecord.create(req.body);

@@ -22,7 +22,7 @@ const getTodayClasses = async (req, res) => {
     throw new Error("You do not have a timetable, contact admin for creating one");
 
   const days = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
-  const today = new Date('August 23 2023, 00:00:00').getDay("August 21 2023") - 1;
+  const today = new Date().getDay() - 1;
   console.log(days[today]);
   await Timetable.populate(facultyTimetable, { path: 'data', select: days[today] });
   console.log(facultyTimetable.data[days[today]]);
