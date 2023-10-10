@@ -1,4 +1,5 @@
 const generateToken = require("../../database/generateToken");
+const Admin = require("../../models/Admin");
 const Faculty = require("../../models/Faculty");
 const Student = require("../../models/Student");
 
@@ -16,6 +17,10 @@ const login = async (req, res, Target) => {
   return res.status(400).send("Invalid username or password");
 }
 
+const adminLogin = async (req, res) => {
+  await login(req, res, Admin);
+}
+
 const facultyLogin = async (req, res) => {
   await login(req, res, Faculty);
 }
@@ -27,4 +32,4 @@ const testController = async (req, res) => {
   res.send({ user: req.user, status: "Authenticated" });
 }
 
-module.exports = { facultyLogin, studentLogin, testController }
+module.exports = { facultyLogin, studentLogin, adminLogin, testController }

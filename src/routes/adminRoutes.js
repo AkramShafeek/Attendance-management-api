@@ -57,8 +57,28 @@ const {
     editClassAllotment,
     deleteClassAllotment
 } = require('../controllers/admin/adminClassAllotmentController');
+const Admin = require('../models/Admin');
+const { adminLogin } = require('../controllers/faculty/authController');
 
 
+router.route('/auth/signup').post(async (req, res) => {
+    if (req.body.secretKey !== process.env.ADMIN_SECRET_KEY)
+        res.status(401).send("Unauthorized access");
+
+    const payload = {
+        firstname: req.body.firstname,
+        lastname: req.body.lastname,
+        email: req.body.email,
+        phone: req.body.phone,
+        password: req.body.password,
+        avatar: req.body.avatar,
+    }
+
+    const adminData = await Admin.create(payload);
+
+    res.status(200).send("Signup successful");
+})
+router.route('/auth/login').post(emptyReqBodyValidator, adminLogin);
 
 // yet to include authentication middleware
 router.route('/dept/create').post(emptyReqBodyValidator, createDept);
